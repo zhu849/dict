@@ -64,16 +64,16 @@ bench: $(TESTS)
 
 plot: $(TESTS)
 	echo 3 | sudo tee /proc/sys/vm/drop_caches;
-	sudo perf stat --repeat 100 \
+	sudo perf stat --repeat 50 \
                 -e cache-misses,cache-references,instructions,cycles \
                 ./test_common --bench CPY $(TEST_DATA) \
 		| grep 'ternary_tree, loaded 206849 words'\
-		| grep -Eo '[0-9]+\.[0-9]+' > cpy_data.csv
-	sudo perf stat --repeat 100 \
+		| grep -Eo '[0-9]+\.[0-9]+' > ./resplot/cpy_data.csv
+	sudo perf stat --repeat 50 \
                 -e cache-misses,cache-references,instructions,cycles \
 				./test_common --bench REF $(TEST_DATA)\
 		| grep 'ternary_tree, loaded 206849 words'\
-		| grep -Eo '[0-9]+\.[0-9]+' > ref_data.csv
+		| grep -Eo '[0-9]+\.[0-9]+' > ./resplot/ref_data.csv
 
 clean:
 	$(RM) $(TESTS) $(OBJS)
